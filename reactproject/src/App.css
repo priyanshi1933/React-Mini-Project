@@ -1,0 +1,10 @@
+/* Sidebar responsive behavior */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    margin-left: 0 !important;
+  }
+}

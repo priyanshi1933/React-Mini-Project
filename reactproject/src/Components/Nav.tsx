@@ -1,33 +1,38 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import logo from '../logo.png'
 
 const Nav = () => {
   return (
-   <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#000000' }}>
+   <nav className="navbar navbar-expand-lg navbar-dark fixed-top" style={{ backgroundColor: '#1C4D8D' }}>
   <div className="container-fluid">
-    <a className="navbar-brand" href="#" style={{color:'white',fontSize:'30px'}}>Navbar</a>
+    <img src={logo} style={{height:'50px',width:'50px'}}/>
+    <a className="navbar-brand ms-3" href="#" style={{color:'white',fontSize:'30px'}}>StockPilot</a>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <Link className="nav-link active" aria-current="page" to="/" style={{color:'white',fontSize:'20px'}}>Home</Link>
+          <Link className="nav-link active" aria-current="page" to="/" style={{color:'white',fontSize:'20px'}}>Dashboard</Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" aria-current="page" to="/about" style={{color:'white',fontSize:'20px'}}>About Us</Link>
+          <Link className="nav-link active" aria-current="page" to="/products" style={{color:'white',fontSize:'20px'}}>Products</Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" aria-current="page" to="/users" style={{color:'white',fontSize:'20px'}}>Users</Link>
         </li>
          <li className="nav-item">
-          <Link className="nav-link" aria-current="page" to="/contact" style={{color:'white',fontSize:'20px'}}>Contact Us</Link>
+          <Link className="nav-link" aria-current="page" to="/orders" style={{color:'white',fontSize:'20px'}}>Orders</Link>
         </li>
-         <li className="nav-item">
+         {/* <li className="nav-item">
           <Link className="nav-link" aria-current="page" to="/report" style={{color:'white',fontSize:'20px'}}>Reports</Link>
-        </li>
+        </li> */}
        </ul>
-      <form className="d-flex" role="search">
+      {/* <form className="d-flex" role="search">
         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button className="btn btn-outline-success" type="submit">Search</button>
-      </form>
+        <button className="btn btn-outline-light" type="submit">Search</button>
+      </form> */}
     </div>
   </div>
 </nav>
