@@ -5,13 +5,13 @@ type Product = {
     id: string,
     title: string,
     price: number,
-    images: string
+    image: string
 }
 
 const Products = () => {
     const [products, setProducts] = useState<Product[]>();
     useEffect(() => {
-        fetch('https://api.escuelajs.co/api/v1/products')
+        fetch('https://fakestoreapi.com/products')
             .then(res => res.json())
             .then(data => setProducts(data));
     }, [])
@@ -25,7 +25,7 @@ const Products = () => {
                     {products?.map((p) => (
                         <div className="card mt-3" style={{ width: '22rem', height: '22rem', alignItems: 'center', borderRadius: '20px' }}>
                             <div className="d-flex justify-content-center align-items-center mt-3">
-                                <img src={p.images} style={{ height: '180px', width: '300px', alignContent: 'center', borderRadius: '5px' }} alt="..." />
+                                <img src={p.image} style={{ height: '180px', width: '300px', alignContent: 'center', borderRadius: '5px' }} alt="..." />
                             </div>
                             <div className="card-body">
                                 <h5 className="card-title" style={{ color: '#1C4D8D' }}>{p.title}</h5>
