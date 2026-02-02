@@ -7,6 +7,8 @@ import Users from './Components/Users'
 import Orders from './Components/Orders'
 import Dashboard from './Components/Dashboard'
 import Products from './Components/Products'
+import Registration from './Components/Registration'
+import Login from './Components/Login'
 
 function App() {
 
@@ -15,7 +17,9 @@ function App() {
     <>
       <Routes>
         <Route>
-          <Route path='/' element={<Dashboard/>}></Route>
+          <Route path='/dashboard' element={<Dashboard/>}></Route>
+          <Route path='/register' element={<Registration/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
            <Route path='/products' element={<Products/>}></Route>
           <Route path='/users' element={<Users/>}></Route>
           <Route path='/orders' element={<Orders/>}></Route>
