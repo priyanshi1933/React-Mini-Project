@@ -17,7 +17,7 @@ const Login = () => {
   });
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...user, [name]: value }));
+    setUser(() => ({ ...user, [name]: value }));
      setMsg((prev)=>({...prev,[name]:" "}));
   };
   const navigate = useNavigate();
