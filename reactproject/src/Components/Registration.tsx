@@ -9,18 +9,20 @@ interface IUser {
 }
 const Registration = () => {
   const [msg, setMsg] = useState({
-    email:"",
-    password:""
+    email: "",
+    password: "",
   });
   const [user, setUser] = useState<IUser>({
     email: "",
     password: "",
     role: "user",
   });
-  const handleChange = ( e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-    setUser((prev) => ({...prev, [name]: value  }));
-    setMsg((prev)=>({...prev,[name]:" "}));
+    setUser((prev) => ({ ...prev, [name]: value }));
+    setMsg((prev) => ({ ...prev, [name]: " " }));
   };
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,30 +30,29 @@ const Registration = () => {
     let validationErrors = { email: "", password: "" };
     let hasError = false;
     if (user.email == "") {
-      validationErrors.email="Please enter email";
-      hasError=true;
+      validationErrors.email = "Please enter email";
+      hasError = true;
     }
-    if(user.password == ""){
-      validationErrors.password="Please enter password";
-      hasError=true;
-    }
-    else if(user.password.length<6){
-      validationErrors.password="Password must be atleast 6 characters long";
-      hasError=true;
+    if (user.password == "") {
+      validationErrors.password = "Please enter password";
+      hasError = true;
+    } else if (user.password.length < 6) {
+      validationErrors.password = "Password must be atleast 6 characters long";
+      hasError = true;
     }
     setMsg(validationErrors);
-    if(hasError)
-      return;
-    await axios
-      .post("http://localhost:3000/register", user)
-      .then(() => {
-        console.log("User Registered Successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    alert("User Created Successfully");
-    navigate("/login");
+    if (hasError) return;
+    try {
+      await axios.post("http://localhost:3000/register", user);
+      alert("User Created Successfully");
+      navigate("/login");
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        setMsg((prev) => ({ ...prev, email: error.response.data.message }));
+      } else {
+        alert("Something went wrong. Please try again after some time");
+      }
+    }
   };
   return (
     <>
@@ -59,15 +60,43 @@ const Registration = () => {
         <center>
           <h1>Registration</h1>
           <div className="container mt-5">
-            <input type="email"  id="email"  name="email"  value={user.email}  placeholder="Enter Your Email"   onChange={handleChange}   className="form-control mt-3"  style={{ width: "500px" }}  />
-            <div style={{color:'red'}}>{msg.email}</div>
-            <input  type="password" id="password" value={user.password} name="password" onChange={handleChange} placeholder="Enter Your Password" className="form-control mt-3"  style={{ width: "500px" }}/>
-            <div style={{color:'red'}}>{msg.password}</div>
-            <select className="form-select mt-3" name="role"   value={user.role}  style={{ width: "500px" }}  onChange={handleChange}>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={user.email}
+              placeholder="Enter Your Email"
+              onChange={handleChange}
+              className="form-control mt-3"
+              style={{ width: "500px" }}
+            />
+            <div style={{ color: "red" }}>{msg.email}</div>
+            <input
+              type="password"
+              id="password"
+              value={user.password}
+              name="password"
+              onChange={handleChange}
+              placeholder="Enter Your Password"
+              className="form-control mt-3"
+              style={{ width: "500px" }}
+            />
+            <div style={{ color: "red" }}>{msg.password}</div>
+            <select
+              className="form-select mt-3"
+              name="role"
+              value={user.role}
+              style={{ width: "500px" }}
+              onChange={handleChange}
+            >
               <option value="admin">Admin</option>
               <option value="user">User</option>
             </select>
-            <button type="submit" className="btn btn-dark mt-3" style={{ width: "500px" }} >
+            <button
+              type="submit"
+              className="btn btn-dark mt-3"
+              style={{ width: "500px" }}
+            >
               Register
             </button>
           </div>
