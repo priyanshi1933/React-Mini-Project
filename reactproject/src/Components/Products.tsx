@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import axios from "axios";
-import { data, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 type Product = {
   id: string;
