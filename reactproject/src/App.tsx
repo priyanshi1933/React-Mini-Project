@@ -10,6 +10,7 @@ import Products from './Components/Products'
 import Registration from './Components/Registration'
 import Login from './Components/Login'
 import AddProd from './Components/AddProd'
+import UpdateProd from './Components/UpdateProd'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path='/register' element={<Registration/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/addprod' element={<AddProd/>}></Route>
+           <Route path='/updateprod/:id' element={<UpdateProd/>}></Route>
            <Route path='/products' element={<Products/>}></Route>
           <Route path='/users' element={<Users/>}></Route>
           <Route path='/orders' element={<Orders/>}></Route>
