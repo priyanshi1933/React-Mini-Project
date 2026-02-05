@@ -10,7 +10,7 @@ type User = {
 const Users = () => {
   const [users, setUsers] = useState<User[]>();
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
+    fetch('http://localhost:3000/users')
       .then(res => res.json())
       .then(data => setUsers(data));
   }, [])
@@ -22,9 +22,8 @@ const Users = () => {
         <table className="table table-primary table-striped table-bordered mt-4" >
           <thead>
             <tr>
-              <th scope="col"  style={{color:'#1C4D8D'}}>ID</th>
-              <th scope="col"  style={{color:'#1C4D8D'}}>Name</th>
-              <th scope="col"  style={{color:'#1C4D8D'}}>Email</th>
+              <th scope="col-lg-6"  style={{color:'#1C4D8D'}}>Name</th>
+              <th scope="col-lg-6"  style={{color:'#1C4D8D'}}>Email</th>
             </tr>
           </thead>
           <tbody>
@@ -33,7 +32,6 @@ const Users = () => {
 
             {users?.map((u) => (
               <tr>
-                <th scope="row" >{u.id}</th>
                 <td>{u.name}</td>
                 <td>{u.email}</td>
               </tr>

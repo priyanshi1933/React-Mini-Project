@@ -1,18 +1,22 @@
 import React, { useState, type ChangeEvent } from "react";
 import "./Reg.css";
 import axios from "axios";
+import { userSchema } from "../Validation/userSchema";
 import { useNavigate } from "react-router-dom";
 interface IUser {
+  name:string;
   email: string;
   password: string;
   role: string;
 }
 const Registration = () => {
   const [msg, setMsg] = useState({
+    name:"",
     email: "",
     password: "",
   });
   const [user, setUser] = useState<IUser>({
+    name:"",
     email: "",
     password: "",
     role: "user",
@@ -27,23 +31,42 @@ const Registration = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let validationErrors = { email: "", password: "" };
-    let hasError = false;
-    if (user.email == "") {
-      validationErrors.email = "Please enter email";
-      hasError = true;
+    const result=userSchema.safeParse(user);
+    if(!result.success){
+      const fieldErrors=result.error.flatten().fieldErrors;
+      setMsg({
+        name:fieldErrors.name?.[0] || "",
+        email:fieldErrors.email?.[0] || "",
+        password:fieldErrors.password?.[0] || "",
+      })
+      return;
     }
-    if (user.password == "") {
-      validationErrors.password = "Please enter password";
-      hasError = true;
-    } else if (user.password.length < 6) {
-      validationErrors.password = "Password must be atleast 6 characters long";
-      hasError = true;
-    }
-    setMsg(validationErrors);
-    if (hasError) return;
+    setMsg({name:"",email:"",password:""});
+    // let validationErrors = { name:"",email: "", password: "" };
+    // let hasError = false;
+    // let namePattern = /^[a-zA-Z\s]+$/; 
+    // if(user.name==""){
+    //   validationErrors.name="Please enter name";
+    //   hasError=true;
+    // }else if(!namePattern.test(user.name)){
+    //   validationErrors.name="Name only contain alphabets";
+    //   hasError=true;
+    // }
+    // if (user.email == "") {
+    //   validationErrors.email = "Please enter email";
+    //   hasError = true;
+    // }
+    // if (user.password == "") {
+    //   validationErrors.password = "Please enter password";
+    //   hasError = true;
+    // } else if (user.password.length < 6) {
+    //   validationErrors.password = "Password must be atleast 6 characters long";
+    //   hasError = true;
+    // }
+    // setMsg(validationErrors);
+    // if (hasError) return;
     try {
-      await axios.post("http://localhost:3000/register", user);
+      await axios.post("http://localhost:3000/register", result.data);
       alert("User Created Successfully");
       navigate("/login");
     } catch (error: any) {
@@ -59,7 +82,19 @@ const Registration = () => {
       <form method="post" className="add" onSubmit={handleSubmit}>
         <center>
           <h1>Registration</h1>
-          <div className="container mt-5">
+           <div className="container mt-5">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={user.name}
+              placeholder="Enter Your Name"
+              onChange={handleChange}
+              className="form-control mt-3"
+              style={{ width: "500px" }}
+            />
+            <div style={{ color: "red" }}>{msg.name}</div>
+         
             <input
               type="email"
               id="email"
