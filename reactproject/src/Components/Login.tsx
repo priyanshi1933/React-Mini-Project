@@ -1,7 +1,10 @@
-import axios from "axios";
+
 import React, { useState, type ChangeEvent } from "react";
 import "./Reg.css";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import { loginUser } from "../Api/auth";
+import { saveToken } from "../Utils/auth";
+
 interface IUser {
   email: string;
   password: string;
@@ -39,7 +42,9 @@ const Login = () => {
     setMsg(validationErrors);
     if (hasError) return;
     try {
-      await axios.post("http://localhost:3000/login", user);
+      // await axios.post("http://localhost:3000/login", user);
+      const res=await loginUser(user.email,user.password);
+      saveToken(res.data.token);
       alert("Login Successfully");
       navigate("/dashboard");
     } catch (error: any) {
@@ -86,7 +91,9 @@ const Login = () => {
             >
               Login
             </button>
+          
           </div>
+          
         </center>
       </form>
     </>

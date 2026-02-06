@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
 
-
 type User = {
   id: string,
   name: string,
@@ -38,6 +37,7 @@ const Users = () => {
             ))}
           </tbody>
         </table>
+       
       </div>
     </>
   )

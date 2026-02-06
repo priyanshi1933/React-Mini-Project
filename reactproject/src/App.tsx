@@ -1,7 +1,7 @@
 
 
 
-import { Route , Routes} from 'react-router-dom'
+import { Route , Routes, useNavigate} from 'react-router-dom'
 
 import Users from './Components/Users'
 import Orders from './Components/Orders'
@@ -11,9 +11,19 @@ import Registration from './Components/Registration'
 import Login from './Components/Login'
 import AddProd from './Components/AddProd'
 import UpdateProd from './Components/UpdateProd'
-
+import Admin from './Components/Admin'
+import { getToken } from './Utils/auth'
+import { useEffect } from 'react'
 function App() {
+  
+  const navigate=useNavigate();
+useEffect(()=>{
+  const token=getToken();
+  if(!token){
+    navigate('/login');
+  }
 
+})
 
   return (
     <>
@@ -27,6 +37,7 @@ function App() {
            <Route path='/products' element={<Products/>}></Route>
           <Route path='/users' element={<Users/>}></Route>
           <Route path='/orders' element={<Orders/>}></Route>
+          <Route path='/admin' element={<Admin/>}></Route>
           {/* <Route path='/report' element={<Reports/>}></Route> */}
         </Route>
       </Routes>

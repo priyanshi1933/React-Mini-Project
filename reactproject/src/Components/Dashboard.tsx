@@ -3,12 +3,13 @@ import Sidebar from './Sidebar'
 import chart from '../chart.jpg'
 
 
-
 const Dashboard = () => {
+
+  
 
     return (
         <>
-            <Sidebar />
+            <Sidebar /> 
             <div style={{ marginLeft: '300px',marginTop:'70px', padding: '20px' }} className='content'>
                 <h1 style={{color:'#1C4D8D'}} >Dashboard</h1>
                   <div
