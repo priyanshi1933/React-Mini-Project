@@ -11,12 +11,20 @@ type Product = {
 };
 
 const Products = () => {
+  const LIMIT=3;
   const [products, setProducts] = useState<Product[]>();
+  const [page,setPage]=useState(1);
+  const [totalPages,setTotalPages]=useState(1);
   useEffect(() => {
-    fetch("http://localhost:3000/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
+    loadData();
+  }, [page]);
+
+  const loadData=async()=>{
+    const res=await axios.get(`http://localhost:3000/products?page=${page}&limit=${LIMIT}`)
+    setProducts(res.data.data);
+    setTotalPages(res.data.totalPages)
+  }
+
   const navigate = useNavigate();
   const handleDelete = async (id: string) => {
     const isDeleted = window.confirm(
@@ -67,6 +75,7 @@ const Products = () => {
                 height: "20rem",
                 alignItems: "center",
                 borderRadius: "20px",
+                background:"#afc9ec"
               }}
             >
               <div className="d-flex justify-content-center align-items-center mt-3">
@@ -76,16 +85,16 @@ const Products = () => {
                     height: "180px",
                     width: "300px",
                     alignContent: "center",
-                    borderRadius: "5px",
+                    borderRadius: "5px"
                   }}
                   alt="..."
                 />
               </div>
               <div className="card-body">
-                <h5 className="card-title" style={{ color: "#1C4D8D" }}>
+                <h5 className="card-title" style={{ color: "#0F2854" }}>
                   {p.title}
                 </h5>
-                <p className="card-text" style={{ color: "#1C4D8D" }}>
+                <p className="card-text" style={{ color: "#0F2854" }}>
                   Rs.{p.price}
                 </p>
                 <div className="d-flex justify-content-center align-items-center">
@@ -133,6 +142,11 @@ const Products = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="btn mt-5" style={{float:'right'}}>
+        <button disabled={page===1} onClick={()=>setPage(page-1)} className="btn btn-primary mt-2">Prev</button>
+        <span className="ms-3 mt-5 " style={{marginTop:'10px'}}>Page {page} of {totalPages}</span>
+        <button disabled={page===totalPages} onClick={()=>setPage(page+1)} className="btn btn-primary mt-2 ms-3">Next</button>
         </div>
       </div>
     </>

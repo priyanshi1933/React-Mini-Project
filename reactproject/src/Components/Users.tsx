@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
+import axios from 'axios'
 
 type User = {
   id: string,
@@ -7,12 +8,19 @@ type User = {
   email: string
 }
 const Users = () => {
+  const LIMIT=5;
   const [users, setUsers] = useState<User[]>();
+  const[page,setPage]=useState(1);
+  const[totalPages,setTotalPages]=useState(1);
+
+  const loadData=async()=>{
+    const res=await axios.get(`http://localhost:3000/users?page=${page}&limit=${LIMIT}`)
+    setUsers(res.data.data);
+    setTotalPages(res.data.totalPages);
+  }
   useEffect(() => {
-    fetch('http://localhost:3000/users')
-      .then(res => res.json())
-      .then(data => setUsers(data));
-  }, [])
+    loadData();
+  }, [page])
   return (
     <>
       <Sidebar />
@@ -37,7 +45,11 @@ const Users = () => {
             ))}
           </tbody>
         </table>
-       
+        <div className='btn' style={{float:'right'}}>
+       <button className='btn btn-primary' disabled={page===1} onClick={()=>setPage(page-1)}>Prev</button>
+       <span className='ms-3'>Page {page} of {totalPages}</span>
+       <button className='btn btn-primary ms-3' disabled={page===totalPages} onClick={()=>setPage(page+1)}>Next</button>
+       </div>
       </div>
     </>
   )

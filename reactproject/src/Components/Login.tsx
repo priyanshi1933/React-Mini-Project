@@ -1,7 +1,7 @@
 
 import React, { useState, type ChangeEvent } from "react";
 import "./Reg.css";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../Api/auth";
 import { saveToken } from "../Utils/auth";
 
@@ -91,7 +91,8 @@ const Login = () => {
             >
               Login
             </button>
-          
+            <h6 className="mt-3">Or SignUp</h6>
+            <Link to='/register'>SignUp</Link>
           </div>
           
         </center>

@@ -23,7 +23,7 @@ useEffect(()=>{
     navigate('/login');
   }
 
-})
+},[])
 
   return (
     <>
