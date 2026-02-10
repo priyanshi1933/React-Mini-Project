@@ -11,16 +11,17 @@ type Product = {
 };
 
 const Products = () => {
-  const LIMIT=3;
+  const LIMIT=6;
   const [products, setProducts] = useState<Product[]>();
   const [page,setPage]=useState(1);
   const [totalPages,setTotalPages]=useState(1);
+  const [search,setSearch]=useState("");
   useEffect(() => {
     loadData();
-  }, [page]);
+  }, [page,search]);
 
   const loadData=async()=>{
-    const res=await axios.get(`http://localhost:3000/products?page=${page}&limit=${LIMIT}`)
+    const res=await axios.get(`http://localhost:3000/products?page=${page}&limit=${LIMIT}&search=${search}`)
     setProducts(res.data.data);
     setTotalPages(res.data.totalPages)
   }
@@ -44,11 +45,15 @@ const Products = () => {
   };
   return (
     <>
+     
       <Sidebar />
       <div
         style={{ marginLeft: "300px", marginTop: "80px", padding: "20px" }}
         className="content"
       >
+         <form className="d-flex" role="search">
+        <input className="form-control me-2" style={{width:'400px'}}  type="search" placeholder="Search Products..." aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value);setPage(1)}}/>
+      </form>
         <center>
           {" "}
           <h1 style={{ color: "#1C4D8D" }}>Products</h1>
