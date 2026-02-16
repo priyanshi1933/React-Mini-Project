@@ -11,20 +11,24 @@ type Product = {
 };
 
 const Products = () => {
-  const LIMIT=6;
+  const LIMIT = 6;
   const [products, setProducts] = useState<Product[]>();
-  const [page,setPage]=useState(1);
-  const [totalPages,setTotalPages]=useState(1);
-  const [search,setSearch]=useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
+  const [product, setProduct] = useState<any>(null);
+  const [qty, setQty] = useState<number>(1);
   useEffect(() => {
     loadData();
-  }, [page,search]);
+  }, [page, search]);
 
-  const loadData=async()=>{
-    const res=await axios.get(`http://localhost:3000/products?page=${page}&limit=${LIMIT}&search=${search}`)
+  const loadData = async () => {
+    const res = await axios.get(
+      `http://localhost:3000/products?page=${page}&limit=${LIMIT}&search=${search}`,
+    );
     setProducts(res.data.data);
-    setTotalPages(res.data.totalPages)
-  }
+    setTotalPages(res.data.totalPages);
+  };
 
   const navigate = useNavigate();
   const handleDelete = async (id: string) => {
@@ -45,17 +49,26 @@ const Products = () => {
   };
   return (
     <>
-     
       <Sidebar />
       <div
         style={{ marginLeft: "300px", marginTop: "80px", padding: "20px" }}
         className="content"
       >
-         <form className="d-flex" role="search">
-        <input className="form-control me-2" style={{width:'400px'}}  type="search" placeholder="Search Products..." aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value);setPage(1)}}/>
-      </form>
+        <form className="d-flex" role="search">
+          <input
+            className="form-control me-2"
+            style={{ width: "400px" }}
+            type="search"
+            placeholder="Search Products..."
+            aria-label="Search"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
+        </form>
         <center>
-          {" "}
           <h1 style={{ color: "#1C4D8D" }}>Products</h1>
         </center>
         <Link
@@ -77,10 +90,10 @@ const Products = () => {
               className="card mt-5"
               style={{
                 width: "22rem",
-                height: "20rem",
+                height: "23rem",
                 alignItems: "center",
                 borderRadius: "20px",
-                background:"#afc9ec"
+                background: "#afc9ec",
               }}
             >
               <div className="d-flex justify-content-center align-items-center mt-3">
@@ -90,7 +103,7 @@ const Products = () => {
                     height: "180px",
                     width: "300px",
                     alignContent: "center",
-                    borderRadius: "5px"
+                    borderRadius: "5px",
                   }}
                   alt="..."
                 />
@@ -102,6 +115,20 @@ const Products = () => {
                 <p className="card-text" style={{ color: "#0F2854" }}>
                   Rs.{p.price}
                 </p>
+                <button
+                  className="btn btn-primary"
+                  style={{ width: "300px" }}
+                  onClick={() => {
+                    setProduct(p);
+                    setQty(1);
+                  }}
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasExample"
+                  aria-controls="offcanvasExample"
+                >
+                  Add To Cart
+                </button>
                 <div className="d-flex justify-content-center align-items-center">
                   {/* <button className="btn btn-primary">View</button> */}
                   {/* <svg
@@ -122,7 +149,7 @@ const Products = () => {
                     height="25"
                     fill="currentColor"
                     onClick={() => handleEdit(p.id || (p as any)._id)}
-                    className="bi bi-pencil-square ms-3 text-success"
+                    className="bi bi-pencil-square ms-3 mt-2 text-success"
                     viewBox="0 0 16 16"
                   >
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -138,7 +165,7 @@ const Products = () => {
                     height="25"
                     onClick={() => handleDelete(p.id || (p as any)._id)}
                     fill="currentColor"
-                    className="bi bi-trash-fill ms-3 text-danger"
+                    className="bi bi-trash-fill ms-3 mt-2  text-danger"
                     viewBox="0 0 16 16"
                   >
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
@@ -148,10 +175,81 @@ const Products = () => {
             </div>
           ))}
         </div>
-        <div className="btn mt-5" style={{float:'right'}}>
-        <button disabled={page===1} onClick={()=>setPage(page-1)} className="btn btn-primary mt-2">Prev</button>
-        <span className="ms-3 mt-5 " style={{marginTop:'10px'}}>Page {page} of {totalPages}</span>
-        <button disabled={page===totalPages} onClick={()=>setPage(page+1)} className="btn btn-primary mt-2 ms-3">Next</button>
+        <div
+          className="offcanvas offcanvas-end"
+          tabIndex={-1}
+          id="offcanvasExample"
+          aria-labelledby="offcanvasExampleLabel"
+          style={{width:'600px'}}
+        >
+          <div className="offcanvas-header">
+            <h5 className="offcanvas-title" id="offcanvasExampleLabel">
+              Cart
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="offcanvas-body">
+            <table className="table table-primary table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Image</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Remove</th>
+                </tr>
+              </thead>
+              {product && (
+                <>
+                  <tbody>
+                    <tr>
+                      <th><img src={`http://localhost:3000/uploads/${product.image}`} style={{width:'100px',height:'100px'}}/></th>
+                      <td>{product.title}</td>
+                      <td>{product.price}</td>
+                      <td><input type="number" value={qty} min={1} onChange={(e)=>{setQty(Number(e.target.value))}} style={{width:'100px'}}/></td>
+                      <td>Total:{product.price*qty}</td>
+                      <td><button className="btn btn-danger" onClick={()=>{
+                        setProduct(null);
+                        setQty(1)
+                      }}>Remove</button></td>
+                    </tr>
+                  </tbody>
+                  <button className="btn btn-success mt-3" onClick={async()=>{
+                    await axios.post(`http://localhost:3000/orders`,{
+                      productId:product._id,
+                      quantity:qty
+                    })
+                    alert('Order placed successfully')
+                  }}>Checkout</button>
+                </>
+              )}
+            </table>
+          </div>
+        </div>
+        <div className="btn mt-5" style={{ float: "right" }}>
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="btn btn-primary mt-2"
+          >
+            Prev
+          </button>
+          <span className="ms-3 mt-5 " style={{ marginTop: "10px" }}>
+            Page {page} of {totalPages}
+          </span>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="btn btn-primary mt-2 ms-3"
+          >
+            Next
+          </button>
         </div>
       </div>
     </>

@@ -1,8 +1,14 @@
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../logo.png'
+import { logout } from '../Utils/auth'
 
 const Nav = () => {
+  const navigate=useNavigate();
+  const logOut=()=>{
+    logout();
+    navigate('/login')
+  }
   return (
    <nav className="navbar navbar-expand-lg navbar-dark fixed-top" style={{ backgroundColor: '#1C4D8D' }}>
   <div className="container-fluid">
@@ -42,6 +48,7 @@ const Nav = () => {
         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
         <button className="btn btn-outline-light" type="submit">Search</button>
       </form> */}
+      <button className='btn btn-primary' onClick={logOut}>Logout</button>
     </div>
   </div>
 </nav>
