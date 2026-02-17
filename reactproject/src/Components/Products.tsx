@@ -16,8 +16,9 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
-  const [product, setProduct] = useState<any>(null);
-  const [qty, setQty] = useState<number>(1);
+  // const [product, setProduct] = useState<any>(null);
+  // const [qty, setQty] = useState<number>(1);
+  const [cart, setCart] = useState<any[]>([]);
   useEffect(() => {
     loadData();
   }, [page, search]);
@@ -47,6 +48,43 @@ const Products = () => {
   const handleEdit = async (id: string) => {
     navigate(`/updateprod/${id}`);
   };
+  const addToCart = (product: any) => {
+    const existing = cart.find((item) => item._id == product._id);
+    if (existing) {
+      setCart(
+        cart.map((item) =>
+          item._id === product._id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        ),
+      );
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
+  };
+  const increaseQty = (id: string) => {
+    setCart(
+      cart.map((item) =>
+        item._id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      ),
+    );
+  };
+  const decreaseQty = (id: string) => {
+    setCart(
+      cart.map((item) =>
+        item._id === id && item.quantity > 0
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      ),
+    );
+  };
+  const removeItem = (id: string) => {
+    setCart(cart.filter((item) => item._id !== id));
+  };
+  const grandTotal = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
   return (
     <>
       <Sidebar />
@@ -119,8 +157,7 @@ const Products = () => {
                   className="btn btn-primary"
                   style={{ width: "300px" }}
                   onClick={() => {
-                    setProduct(p);
-                    setQty(1);
+                    addToCart(p);
                   }}
                   type="button"
                   data-bs-toggle="offcanvas"
@@ -180,7 +217,7 @@ const Products = () => {
           tabIndex={-1}
           id="offcanvasExample"
           aria-labelledby="offcanvasExampleLabel"
-          style={{width:'600px'}}
+          style={{ width: "600px" }}
         >
           <div className="offcanvas-header">
             <h5 className="offcanvas-title" id="offcanvasExampleLabel">
@@ -205,31 +242,65 @@ const Products = () => {
                   <th scope="col">Remove</th>
                 </tr>
               </thead>
-              {product && (
+              {cart.length === 0 && <h6>No items in the cart</h6>}
+              {cart.map((item) => (
                 <>
                   <tbody>
                     <tr>
-                      <th><img src={`http://localhost:3000/uploads/${product.image}`} style={{width:'100px',height:'100px'}}/></th>
-                      <td>{product.title}</td>
-                      <td>{product.price}</td>
-                      <td><input type="number" value={qty} min={1} onChange={(e)=>{setQty(Number(e.target.value))}} style={{width:'100px'}}/></td>
-                      <td>Total:{product.price*qty}</td>
-                      <td><button className="btn btn-danger" onClick={()=>{
-                        setProduct(null);
-                        setQty(1)
-                      }}>Remove</button></td>
+                      <th>
+                        <img
+                          src={`http://localhost:3000/uploads/${item.image}`}
+                          style={{ width: "100px", height: "100px" }}
+                        />
+                      </th>
+                      <td>{item.title}</td>
+                      <td>{item.price}</td>
+                      <td>
+                        <button
+                          className="btn btn-outline-primary me-1 btn-sm"
+                          onClick={() => decreaseQty(item._id)}
+                        >
+                          -
+                        </button>
+                        {item.quantity}
+                        <button
+                          className="btn btn-outline-primary ms-1 btn-sm"
+                          onClick={() => increaseQty(item._id)}
+                        >
+                          +
+                        </button>
+                      </td>
+                      <td>{item.price * item.quantity}</td>
+                      <td>
+                        <button
+                          className="btn btn-outline-danger btn-sm"
+                          onClick={() => removeItem(item._id)}
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
                   </tbody>
-                  <button className="btn btn-success mt-3" onClick={async()=>{
-                    await axios.post(`http://localhost:3000/orders`,{
-                      productId:product._id,
-                      quantity:qty
-                    })
-                    alert('Order placed successfully')
-                  }}>Checkout</button>
                 </>
-              )}
+              ))}
             </table>
+
+            <h5 style={{ float: "right" }}>Grand Total:{grandTotal}</h5>
+            <button
+              className="btn btn-success mt-3"
+              onClick={async () => {
+                for (let item of cart) {
+                  await axios.post(`http://localhost:3000/orders`, {
+                    productId: item._id,
+                    quantity: item.quantity,
+                  });
+                }
+                alert("Order placed successfully");
+                setCart([]);
+              }}
+            >
+              Checkout
+            </button>
           </div>
         </div>
         <div className="btn mt-5" style={{ float: "right" }}>

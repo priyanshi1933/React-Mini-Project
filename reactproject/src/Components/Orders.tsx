@@ -62,7 +62,7 @@ const Orders = () => {
             ))}
           </tbody>
         </table>
-        <div className="btn">
+        <div className="btn" style={{float:'right'}}>
             <button className="btn btn-primary" disabled={page===1} onClick={()=>setPage(page-1)}>Prev</button>
             <span className="ms-3">Page {page} of {totalPages}</span>
             <button className="btn btn-primary ms-3" disabled={page===totalPages} onClick={()=>setPage(page+1)}>Next</button>
