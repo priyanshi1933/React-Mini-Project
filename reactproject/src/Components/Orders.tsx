@@ -53,9 +53,9 @@ const Orders = () => {
           </thead>
           <tbody>
             {orders?.map((o:any) => (
-              <tr>
-                <td>{o.productId.title}</td>
-                <td>{o.productId.price}</td>
+              <tr key={o._id}>
+                <td>{o.productId?.title}</td>
+                <td>{o.productId?.price}</td>
                 <td>{o.quantity}</td>
                 <td>{o.totalAmount}</td>
               </tr>
