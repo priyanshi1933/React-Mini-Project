@@ -1,7 +1,23 @@
-.add {
+/* .add {
   margin: 50px auto;
   padding: 40px;
   width: 50%;
   border-radius: 5px;
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.065);
+} */
+.add {
+  margin: 50px auto;
+  padding: 40px;
+  width: 50%; /* Desktop default */
+  border-radius: 5px;
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.065);
+}
+
+/* For Tablets and Mobiles (Screens < 768px) */
+@media (max-width: 768px) {
+  .add {
+    width: 85%;    /* Wider on smaller screens */
+    padding: 20px; /* Less padding to save space */
+    margin: 20px auto;
+  }
 }

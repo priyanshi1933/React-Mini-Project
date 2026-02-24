@@ -68,7 +68,7 @@ const AddProd = () => {
   return (
     <>
       <Sidebar />
-      <div
+      {/* <div
         style={{ marginLeft: "300px", marginTop: "70px", padding: "20px" }}
         className="content"
       ></div>
@@ -77,15 +77,96 @@ const AddProd = () => {
           <h1 style={{ color: "#1C4D8D" }}>Add Product</h1>
           <div className="container mt-5">
             <input  type="text"  id="title"  name="title"  value={title}  placeholder="Enter Title"  onChange={handleTitleChange}  className="form-control mt-3"  style={{ width: "500px" }} />
-            {/* <div style={{ color: "red" }}>{msg.title}</div> */}
+          
             <input type="number" id="price" value={price}  name="price"  onChange={handlePriceChange}  placeholder="Enter Price"  className="form-control mt-3"   style={{ width: "500px" }}  />
-            {/* <div style={{ color: "red" }}>{msg.price}</div> */}
+           
             <input type="file" id="image" name="image"  onChange={handleImageChange} className="form-control mt-3" style={{ width: "500px" }}/>
-            {/* <div style={{ color: "red" }}>{msg.image}</div> */}
+          
             <button type="submit"  className="btn-lg mt-3" style={{ width: "500px", height: "40px", background: "#1C4D8D",  color: "white",  }} > Add Product</button>
           </div>
         </center>
-      </form>
+      </form> */}
+      <div
+        className="content"
+        style={{
+          marginTop: "150px",
+          padding: "20px",
+          // This ensures the margin only exists on larger screens
+          marginLeft: window.innerWidth > 768 ? "300px" : "0px",
+        }}
+      >
+        <div className="container-fluid">
+          <div className="row justify-content-center">
+            <div className="col-12">
+              <form
+                method="post"
+                className="add shadow-sm bg-white rounded border"
+                onSubmit={handleSubmit}
+                style={{
+                  width: "80%", 
+                  margin: "0 auto", 
+                  padding: "30px", 
+                  maxWidth: "1100px", 
+                }}
+              >
+                <h1
+                  className="text-center mb-4"
+                  style={{ color: "#1C4D8D", fontSize: "28px" }}
+                >
+                  Add Product
+                </h1>
+
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value={title}
+                    placeholder="Enter Title"
+                    onChange={handleTitleChange}
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <input
+                    type="number"
+                    id="price"
+                    value={price}
+                    name="price"
+                    onChange={handlePriceChange}
+                    placeholder="Enter Price"
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    onChange={handleImageChange}
+                    className="form-control"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn w-100 mt-2"
+                  style={{
+                    background: "#1C4D8D",
+                    color: "white",
+                    height: "45px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Add Product
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

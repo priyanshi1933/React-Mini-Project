@@ -16,16 +16,17 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
   // const [product, setProduct] = useState<any>(null);
   // const [qty, setQty] = useState<number>(1);
   const [cart, setCart] = useState<any[]>([]);
   useEffect(() => {
     loadData();
-  }, [page, search]);
+  }, [page, search, sort]);
 
   const loadData = async () => {
     const res = await axios.get(
-      `http://localhost:3000/products?page=${page}&limit=${LIMIT}&search=${search}`,
+      `http://localhost:3000/products?page=${page}&limit=${LIMIT}&search=${search}&sort=${sort}`,
     );
     setProducts(res.data.data);
     setTotalPages(res.data.totalPages);
@@ -92,7 +93,7 @@ const Products = () => {
         style={{ marginLeft: "300px", marginTop: "80px", padding: "20px" }}
         className="content"
       >
-        <form className="d-flex" role="search">
+        <form className="d-flex justify-content-between w-100" role="search">
           <input
             className="form-control me-2"
             style={{ width: "400px" }}
@@ -105,9 +106,23 @@ const Products = () => {
               setPage(1);
             }}
           />
-        </form>
+       
+       
+          <select
+            className="form-select"
+            style={{float:'right',width:'400px'}}
+            value={sort}
+            onChange={(e)=>{setSort(e.target.value);setPage(1);}}
+          >
+            <option value="">Sort By</option>
+            <option value="price_asc">Price : Low to High</option>
+            <option value="price_desc">Price : High to Low</option>
+            <option value="title_asc">Title : A-Z</option>
+            <option value="title_desc">Title : Z-A</option>
+          </select>
+         </form>
         <center>
-          <h1 style={{ color: "#1C4D8D" }}>Products</h1>
+          <h1 style={{ color: "#1C4D8D" }} className="mt-3">Products</h1>
         </center>
         <Link
           to="/addprod"
@@ -124,8 +139,9 @@ const Products = () => {
           }}
         >
           {products?.map((p) => (
-            <div key={p.id || (p as any)._id}
-              className="card mt-5"
+            <div
+              key={p.id || (p as any)._id}
+              className="card mt-5 ms-4"
               style={{
                 width: "22rem",
                 height: "23rem",
@@ -137,7 +153,7 @@ const Products = () => {
               <div className="d-flex justify-content-center align-items-center mt-3">
                 <img
                   src={`http://localhost:3000/uploads/${p.image}`}
-                  crossOrigin="anonymous" 
+                  crossOrigin="anonymous"
                   style={{
                     height: "180px",
                     width: "300px",
@@ -250,7 +266,8 @@ const Products = () => {
                     <tr>
                       <th>
                         <img
-                          src={`http://localhost:3000/uploads/${item.image}`}  crossOrigin="anonymous" 
+                          src={`http://localhost:3000/uploads/${item.image}`}
+                          crossOrigin="anonymous"
                           style={{ width: "100px", height: "100px" }}
                         />
                       </th>
