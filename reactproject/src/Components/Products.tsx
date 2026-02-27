@@ -308,9 +308,14 @@ const Products = () => {
               className="btn btn-success mt-3"
               onClick={async () => {
                 for (let item of cart) {
+                  const token=localStorage.getItem("token");
                   await axios.post(`http://localhost:3000/orders`, {
                     productId: item._id,
                     quantity: item.quantity,
+                  },{
+                    headers:{
+                      Authorization:`Bearear ${token}`
+                    }
                   });
                 }
                 alert("Order placed successfully");

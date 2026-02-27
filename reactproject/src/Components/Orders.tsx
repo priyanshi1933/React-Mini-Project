@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import axios from "axios";
-
 type Order = {
   order_id: string;
+  name: string;
   title: string;
   price: number;
   quantity: number;
@@ -12,17 +12,21 @@ type Order = {
 
 const Orders = () => {
   const LIMIT = 5;
-  const [page,setPage]=useState(1);
-  const [totalPages,setTotalPages]=useState(1);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [orders, setOrders] = useState<Order[]>();
   useEffect(() => {
     getOrder();
   }, [page]);
-  const getOrder=async()=>{
-    const res=await axios.get(`http://localhost:3000/orders?page=${page}&limit=${LIMIT}`)
+  const getOrder = async () => {
+    const res = await axios.get(
+      `http://localhost:3000/orders?page=${page}&limit=${LIMIT}`,
+    );
+
     setOrders(res.data.data);
     setTotalPages(res.data.totalPages);
-  }
+  };
+  console.log(orders);
   return (
     <>
       <Sidebar />
@@ -38,6 +42,9 @@ const Orders = () => {
           <thead>
             <tr>
               <th scope="col" style={{ color: "#1C4D8D" }}>
+                User Name
+              </th>
+              <th scope="col" style={{ color: "#1C4D8D" }}>
                 Product Name
               </th>
               <th scope="col" style={{ color: "#1C4D8D" }}>
@@ -52,8 +59,9 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders?.map((o:any) => (
+            {orders?.map((o: any) => (
               <tr key={o._id}>
+                <td>{o.userId?.name}</td>
                 <td>{o.productId?.title}</td>
                 <td>{o.productId?.price}</td>
                 <td>{o.quantity}</td>
@@ -62,10 +70,24 @@ const Orders = () => {
             ))}
           </tbody>
         </table>
-        <div className="btn" style={{float:'right'}}>
-            <button className="btn btn-primary" disabled={page===1} onClick={()=>setPage(page-1)}>Prev</button>
-            <span className="ms-3">Page {page} of {totalPages}</span>
-            <button className="btn btn-primary ms-3" disabled={page===totalPages} onClick={()=>setPage(page+1)}>Next</button>
+        <div className="btn" style={{ float: "right" }}>
+          <button
+            className="btn btn-primary"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+          >
+            Prev
+          </button>
+          <span className="ms-3">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="btn btn-primary ms-3"
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </button>
         </div>
       </div>
     </>
